@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 10px
+}
+  table#currency_tab{
+     width: 100%;    
+    background-color: #f1f1c1;
+     border: 1px solid black;
+    border-collapse: collapse;
+     padding: 5px;
+    text-align: left;
+  }
+  table#bitcoin_tab{
+     width: 100%;    
+    background-color: #f1c1c1;
+     border: 1px solid black;
+    border-collapse: collapse;
+     padding: 5px;
+    text-align: left;
+  }
+  </style>
+	<meta charset="utf-8">
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js'></script>
+	<link rel='icon' href='https://getbootstrap.com/favicon.ico'>
+	<link rel="stylesheet" href="https://getbootstrap.com/dist/css/bootstrap.min.css">
+	<link rel='stylesheet' href='https://getbootstrap.com/docs/4.0/examples/starter-template/starter-template.css'>
+	<title>Wealth Management</title>
+</head>
+<body>
+	{% include 'includes/_navbar.html' %}
+	<h3>Welcome to Crypto-Money</h3>
+  <br>
+  <table width=100% height=100%>
+    <form class="form-inline my-2 my-lg-0">
+    <table>
+    <tr>
+         <th> <h4>BitCoin</h4></th>
+          <th><input class="form-control mr-sm-2" type="text" placeholder="0.0" aria-label="Enter Value"></th>
+         <th> <h4>INR</h4></th>
+          <th><input class="form-control mr-sm-2" type="text" placeholder="0.0" aria-label="Enter Value"></th>
+          </tr>
+          <tr><h5>=</h5></tr>
+          <tr>  
+          <th><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Convert</button></th>
+        </tr>
+        </form>
+  </table>
+  </table>
+	</form>
+  <h5><u>Current Currency Prices</u>(1 INR= X CUR)</h5>
+  <table id="currency_tab" width=100% height=100%>
+    <tr>
+    {% for tup in current_prices[:5] %}
+      <th><h5>{{tup[0]}}</h5></th>
+      <th><b>{{tup[1]}}</b></th>
+    {% endfor %}
+    </tr>
+    <tr>
+    {% for tup in current_prices[5:10] %}
+      <th><h5>{{tup[0]}}</h5></th>
+      <th><b>{{tup[1]}}</b></th>
+    {% endfor %}
+    </tr>
+    <tr>
+    {% for tup in current_prices[10:15] %}
+    
+      <th><h5>{{tup[0]}}</h5></th>
+      <th><b>{{tup[1]}}</b></th>
+    
+    {% endfor %}
+    </tr>
+    <tr>
+    {% for tup in current_prices[15:20] %}
+    
+      <th><h5>{{tup[0]}}</h5></th>
+      <th><b>{{tup[1]}}</b></th>
+    
+    {% endfor %}
+    </tr>
+    <tr>
+    {% for tup in current_prices[20:25] %}
+    
+      <th><h5>{{tup[0]}}</h5></th>
+      <th><b>{{tup[1]}}</b></th>
+    
+    {% endfor %}
+    </tr>
+    <tr>
+    {% for tup in current_prices[25:30] %}
+    
+      <th><h5>{{tup[0]}}</h5></th>
+      <th><b>{{tup[1]}}</b></th>
+    
+    {% endfor %}
+  </tr>
+  </table>
+  <br>
+  <br>
+  <h5><u>Current Bitcoin Prices</u>(1 CUR= X BTC)</h5>
+  <table id="bitcoin_tab" width=100% height=100%>
+    <tr>
+    {% for tup in current_prices[:5] %}
+      <th><h5>{{tup[0]}}</h5></th>
+      <th><b>{{tup[1]}}</b></th>
+    {% endfor %}
+    </tr>
+    <tr>
+    {% for tup in current_prices[5:10] %}
+      <th><h5>{{tup[0]}}</h5></th>
+      <th><b>{{tup[2]}}</b></th>
+    {% endfor %}
+    </tr>
+    <tr>
+    {% for tup in current_prices[10:15] %}
+    
+      <th><h5>{{tup[0]}}</h5></th>
+      <th><b>{{tup[2]}}</b></th>
+    
+    {% endfor %}
+    </tr>
+    <tr>
+    {% for tup in current_prices[15:20] %}
+    
+      <th><h5>{{tup[0]}}</h5></th>
+      <th><b>{{tup[2]}}</b></th>
+    
+    {% endfor %}
+    </tr>
+    <tr>
+    {% for tup in current_prices[20:25] %}
+    
+      <th><h5>{{tup[0]}}</h5></th>
+      <th><b>{{tup[2]}}</b></th>
+    
+    {% endfor %}
+    </tr>
+    <tr>
+    {% for tup in current_prices[25:30] %}
+    
+      <th><h5>{{tup[0]}}</h5></th>
+      <th><b>{{tup[2]}}</b></th>
+    
+    {% endfor %}
+  </tr>
+  </table>
+  
+  <h4>BitCoin Price Today(USD)</h4>
+  <canvas id="myChart" width="800" height="600"></canvas>
+	<script>
+		// Global parameters:
+// do not resize the chart canvas when its container does (keep at 600x400px)
+Chart.defaults.global.responsive = false;
+ 
+// define the chart data
+var charthata = {
+  labels : [{% for item in labels %}
+             "{{item}}",
+            {% endfor %}],
+  datasets : [{
+      label: '{{ legend }}',
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "rgba(75,192,192,0.4)",
+      borderColor: "rgba(75,192,192,1)",
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(75,192,192,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(75,192,192,1)",
+      pointHoverBorderColor: "rgba(220,220,220,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data : [{% for item in values %}
+                {{item}},
+              {% endfor %}],
+      spanGaps: false
+  }]
+}
+ 
+// get chart canvas
+var ctx = document.getElementById("myChart").getContext("2d");
+ 
+// create the chart using the chart canvas
+var myChart = new Chart(ctx, {
+  type: 'line',
+  data: charthata,
+});	
+	</script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"/>
+</body>
+</html>
