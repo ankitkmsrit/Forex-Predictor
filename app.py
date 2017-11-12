@@ -1,4 +1,5 @@
 from flask import Flask,render_template,request
+from stock import callback
 from datetime import time
 from model import InputForm
 from forex_python.converter import CurrencyRates
@@ -15,17 +16,18 @@ def index():
     c=CurrencyRates()
     btc_converter = BtcConverter()
     price_json=c.get_rates('INR')
-    form = InputForm(request.form)
-    if(request.method == 'POST' and form.validate()):
-        result = compute(c,btc_converter,form.btc.data, form.inr.data)
-    else:
-        result=None
+    result=[None,None,None]
+    if(request.method=='POST'):
+        stock_name= request.form['stock_name']
+        if(stock_name!=""):
+            result = callback(stock_name)
+        else:
+            result=[None,None,None,None]
     prices=[]
     for key,value in price_json.items():
         prices.append((key,value,btc_converter.get_latest_price(key)))
     print('No of Supported Currencies: ',len(price_json),'||||File Type: ',type(price_json))
-    legend = 'Temperatures'
-    links=['atif','faitma','jabin']
+    legend = 'BitCoin Price Index'
     temperatures = [73.7, 73.4, 73.8, 72.8, 68.7, 65.2,
                         61.8, 58.7, 58.2, 58.3, 60.5, 65.7,
                         70.2, 71.4, 71.2, 70.9, 71.3, 71.1]
@@ -47,7 +49,8 @@ def index():
                  time(hour=11, minute=18, second=00),
                  time(hour=11, minute=18, second=15),
                  time(hour=11, minute=18, second=30)]
-    return render_template('index.html', values=temperatures, labels=times, legend=legend, links=links, current_prices=prices, form=form, result=result)
+    links=['a','b','c']
+    return render_template('index.html', values=temperatures, labels=times, legend=legend, links=links, current_prices=prices, result=result)
 
 @app.route('/about_us')
 def about():

@@ -36,22 +36,21 @@
 	<h3>Welcome to Crypto-Money</h3>
   <br>
   <table width=100% height=100%>
-    <form class="form-inline my-2 my-lg-0">
+    <form class="form-inline my-2 my-lg-0" action="/" method="post">
     <table>
     <tr>
-         <th> <h4>BitCoin</h4></th>
-          <th><input class="form-control mr-sm-2" type="text" placeholder="0.0" aria-label="Enter Value"></th>
-         <th> <h4>INR</h4></th>
-          <th><input class="form-control mr-sm-2" type="text" placeholder="0.0" aria-label="Enter Value"></th>
-          </tr>
-          <tr><h5>=</h5></tr>
-          <tr>  
+         <th> <h4>Stock Name</h4></th>
+          <th><input class="form-control mr-sm-2" type="text" placeholder="" aria-label="Enter Value" name="stock_name"></th>  
           <th><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Convert</button></th>
         </tr>
         </form>
   </table>
   </table>
 	</form>
+  <h1>Name: {{result[3]}}</h1><br>
+  <h1>Score: {{ result[0] }}</h1><br>
+    <h1>From: {{ result[1] }}</h1><br>
+      <h1>to: {{ result[2] }}</h1><br>
   <h5><u>Current Currency Prices</u>(1 INR= X CUR)</h5>
   <table id="currency_tab" width=100% height=100%>
     <tr>
